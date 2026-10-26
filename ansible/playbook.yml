@@ -1,0 +1,36 @@
+---
+- name: Deploy website using Docker
+  hosts: webservers
+  become: true
+
+  tasks:
+    - name: Install Docker
+      ansible.builtin.apt:
+        name: docker.io
+        state: present
+        update_cache: true
+
+    - name: Start and enable Docker
+      ansible.builtin.service:
+        name: docker
+        state: started
+        enabled: true
+
+    - name: Copy website files to EC2
+      ansible.builtin.copy:
+        src: ../website/
+        dest: /opt/automated-website/
+        owner: root
+        group: root
+        mode: "0755"
+
+    - name: Run website container
+      community.docker.docker_container:
+        name: automated-website
+        image: nginx:alpine
+        state: started
+        restart_policy: unless-stopped
+        published_ports:
+          - "80:80"
+        volumes:
+          - /opt/automated-website:/usr/share/nginx/html:ro

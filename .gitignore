@@ -1,0 +1,17 @@
+# AWS credentials and private keys
+*.pem
+*.key
+.aws/
+
+# Terraform generated files and state
+terraform/.terraform/
+terraform/*.tfstate
+terraform/*.tfstate.*
+terraform/*.tfvars
+terraform/crash.log
+terraform/override.tf
+terraform/override.tf.json
+
+# Ansible temporary files
+*.retry
+ansible/inventory.ini
